@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Markdown from './components/index'
+import Markdown from './components/Markdown'
 
 export default {
   name: 'App',
