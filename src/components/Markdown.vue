@@ -1,5 +1,5 @@
 <template lang="html">
-    <div :class="`markdown ${fillscreen ? 'fullscreen': ''} ${bordered? 'border': ''}`" ref='markdown' :style="{width:width +'px', height: height + 'px'}">
+    <div :class="`markdown ${fullscreen ? 'fullscreen': ''} ${bordered? 'border': ''}`" ref='markdown' :style="{width:width +'px', height: height + 'px'}">
         <!--头部工具栏-->
         <ul class="markdown-toolbars" v-show="!preview">
             <li>
@@ -54,6 +54,9 @@
             <li v-if="tools.ol" name="有序列表">
                 <span class="iconfont icon-orderedList" @click="insertOl"></span>
             </li>
+            <li v-if="tools.code" name="代码块">
+                <span  class="iconfont icon-code" @click="insertCode"></span>
+            </li>
             <li v-if="tools.notchecked" name="未完成列表" >
                 <span class="iconfont icon-iconfontcheckboxunchecked" @click="insertNotFinished"></span>
             </li>
@@ -86,8 +89,8 @@
                     </ul> -->
                 </div>
             </li>
-            <li class="import-file" name="导入文件" v-show="tools.exportmd">
-                <span class="iconfont icon-daoru" @click="importmd"></span>
+            <li class="import-file" name="导入文件" v-show="tools.importmd">
+                <span class="iconfont icon-daoru" @click="importFile"></span>
                 <input
                     type="file"
                     @change="importFile($event)"
