@@ -3,11 +3,10 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/xml/xml';
-import 'codemirror/lib/codemirror.css';
+import '../assets/js/codemirror/style/codemirror.css';
 import common from '../mixins/common';
-// import compiler from '../assets/js/letter/'
-// import marked from '../assets/js/marked';
-// import defaultTools from '../config/tools'
+import marked from '../assets/js/marked';
+
 
 export default {
     name: 'markdown-main',
@@ -235,7 +234,7 @@ export default {
         },
         insertOl() {// 有序列表
             const {editor, lastPosition = {}} = this;
-            const {line = 0, ch =0} = lastPosition;
+            const {line = 0, ch = 0} = lastPosition;
             const selection = editor.getSelection();
             if (selection) {
                 this.insertContent('\n1.  ' + selection + '\n\n');
@@ -308,7 +307,7 @@ export default {
                 } else if (/^d+\.$/.test(lastInsert.trim())){
                     e.preventDefault();
                     this.insertContent(
-                        '\n' + (parseInt(lastInsert, 0)+ 1) + '.   '
+                        '\n' + (parseInt(lastInsert, 0)+ 1) + '.  '
                     );
                 }
             }
@@ -367,7 +366,13 @@ export default {
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(() => {
                 const {currentValue} = this;
-                let html = ''
+                let html = marked(currentValue, {
+                    sanitize: false,
+                    ...this.markedOptions
+                }).replace(/href="/gi, 'target="_blank" href="');
+                if (this.copyCode && html !== '') {
+                    html = html.replace(/<pre>/g, '<div class="code-block"><span class="copy-code">' + this.copyBtnText + '</span><pre>').replace(/<\/pre>/g, '</pre></div>')
+                }
                 this.html = html;
                 this.addImageClickListener();
                 this.addCopyListener();

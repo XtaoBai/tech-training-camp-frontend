@@ -25,22 +25,22 @@
                 <span class="iconfont icon-Underline" @click="insertUnderline"></span>
             </li>
             <li v-if="tools.h1" name="标题1">
-                <span class="iconfont icon-h1" @click="insertTitile(1)"></span>
+                <span class="iconfont icon-h1" @click="insertTitle(1)"></span>
             </li>
             <li v-if="tools.h2" name="标题2">
-                <span class="iconfont icon-h2" @click="insertTitile(2)"></span>
+                <span class="iconfont icon-h2" @click="insertTitle(2)"></span>
             </li>
             <li v-if="tools.h3" name="标题3">
-                <span class="iconfont icon-h3" @click="insertTitile(3)"></span>
+                <span class="iconfont icon-h3" @click="insertTitle(3)"></span>
             </li>
             <li v-if="tools.h4" name="标题4">
-                <span class="iconfont icon-h4" @click="insertTitile(4)"></span>
+                <span class="iconfont icon-h4" @click="insertTitle(4)"></span>
             </li>
             <li v-if="tools.h5" name="标题5">
-                <span class="iconfont icon-h5" @click="insertTitile(5)"></span>
+                <span class="iconfont icon-h5" @click="insertTitle(5)"></span>
             </li>
             <li v-if="tools.h6" name="标题6">
-                <span class="iconfont icon-h6" @click="insertTitile(6)"></span>
+                <span class="iconfont icon-h6" @click="insertTitle(6)"></span>
             </li>
             <li v-if="tools.hr" name="分割线">
                 <span class="iconfont icon-hr" @click="insertLine"></span>
@@ -195,7 +195,7 @@ import markdown from "./index";
 export default markdown;
 </script>
 <style scoped lang="less">
-
+@import "../assets/css/light";
 @import "../assets/css/index";
 @import "../assets/font/iconfont.css";
 </style>

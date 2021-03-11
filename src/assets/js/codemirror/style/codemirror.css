@@ -2,8 +2,8 @@
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
-  font-family: monospace;
-  height: 300px;
+  /* font-family: monospace; */
+  height: 100%;
   color: black;
   direction: ltr;
 }
@@ -348,3 +348,138 @@ div.CodeMirror-dragcursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+/* DEFAULT THEME */
+
+.cm-s-default.CodeMirror,
+.cm-s-default .CodeMirror-gutters {
+    background-color: #282a36 !important;
+    color: #f8f8f2 !important;
+    border: none;
+    font-family: Menlo, Consolas, "Courier New", Courier, FreeMono, monospace !important;
+
+}
+
+.cm-s-default * {
+    line-height: 1.6 !important;
+    font-size: 14px;
+    font-family: Menlo, Consolas, "Courier New", Courier, FreeMono, monospace !important;
+    color: #ccc;
+}
+
+.cm-s-default .CodeMirror-gutters {
+    color: #282a36;
+}
+
+.cm-s-default .CodeMirror-cursor {
+    border-left: solid thin #f8f8f0;
+}
+
+.cm-s-default .CodeMirror-selected {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-default .CodeMirror-line::selection,
+.cm-s-default .CodeMirror-line > span::selection,
+.cm-s-default .CodeMirror-line > span > span::selection {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-default .CodeMirror-line::-moz-selection,
+.cm-s-default .CodeMirror-line > span::-moz-selection,
+.cm-s-default .CodeMirror-line > span > span::-moz-selection {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-default span.cm-comment {
+    color: #999;
+}
+
+.cm-s-default span.cm-string,
+.cm-s-default span.cm-string-2 {
+    color: #ce9178;
+}
+
+.cm-s-default span.cm-number {
+    color: #bd93f9;
+}
+
+.cm-s-default span.cm-variable {
+    color: #61afef;
+}
+
+.cm-s-default span.cm-variable-2 {
+    color: #61afef;
+}
+
+.cm-s-default span.cm-def {
+    color: #e0e2e4;
+}
+
+.cm-s-default span.cm-operator {
+    color: #e0e2e4;
+}
+
+.cm-s-default span.cm-keyword {
+    color: #c678dd;
+}
+
+.cm-s-default span.cm-atom {
+    color: #bd93f9;
+}
+
+.cm-s-default span.cm-meta {
+    color: #f8f8f2;
+}
+
+.cm-s-default span.cm-tag {
+    color: #569cd6;
+}
+
+.cm-s-default span.cm-attribute {
+    color: #9cdcfe;
+}
+
+.cm-s-default span.cm-qualifier {
+    color: #9cdcfe;
+}
+
+.cm-s-default span.cm-property {
+    color: #dcdcaa;
+}
+
+.cm-s-default span.cm-builtin {
+    color: #50fa7b;
+}
+
+.cm-s-default span.cm-variable-3,
+.cm-s-default span.cm-type {
+    color: #ffb86c;
+}
+
+.cm-s-default .CodeMirror-activeline-background {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cm-s-default .CodeMirror-matchingbracket {
+    text-decoration: underline;
+    color: white !important;
+}
+
+.cm-s-default .cm-header {
+    color: #fff;
+}
+
+.cm-s-default .CodeMirror-gutter {
+    background: #22252b;
+    padding-right: 2px;
+}
+
+.cm-link {
+    text-decoration: underline;
+    color: #569cd6;
+}
+.cm-url{
+    color: #9cdcfe!important;
+}
+
