@@ -233,7 +233,7 @@ export default {
             }
         },
         insertOl() {// 有序列表
-            const {editor, lastPosition = {}} = this;
+            const {editor, lastInsert ,lastPosition = {}} = this;
             const {line = 0, ch = 0} = lastPosition;
             const selection = editor.getSelection();
             if (selection) {
@@ -242,6 +242,10 @@ export default {
                 if (editor.isClean() || ch === 0) {
                     this.insertContent('1.  ');
                     this.setCursor(line, 4);
+                }else if (/^\d+\.$/.test(lastInsert.trim())){
+                    this.insertContent(
+                        '\n' + (parseInt(lastInsert, 10)+ 1) + '.  '
+                    );
                 } else {
                     this.insertContent('\n1.  ');
                     this.setCursor(line + 1, 4);
@@ -304,10 +308,10 @@ export default {
                     e.preventDefault();
                     this.insertContent('\n' + lastInsert);
 
-                } else if (/^d+\.$/.test(lastInsert.trim())){
+                } else if (/^\d+\.$/.test(lastInsert.trim())){
                     e.preventDefault();
                     this.insertContent(
-                        '\n' + (parseInt(lastInsert, 0)+ 1) + '.  '
+                        '\n' + (parseInt(lastInsert, 10)+ 1) + '.  '
                     );
                 }
             }

@@ -95,7 +95,7 @@ export default {
     },
     methods:{
         insertLink(){ // 插入链接
-            this.insertLink('\n[link](href)');
+            this.insertContent('\n[link](href)');
         },
         insertImage(){ // 插入图片
             this.insertContent('\n![image](imgUrl)')
@@ -125,12 +125,18 @@ export default {
             saveFile(this.currentValue, this.exportFileName + '.md');
         },
         importFile(e){ //导入本地文件
+            // console.log(e)
             const file = e.target.files[0];
+            console.log(file)
             if(!(file)){
+                console.log('文件不正确')
                 return;
             }
-            const {type} = file;
-            if(!['text/markdown', 'text/src'].includes(type)){
+            const {name} = file;
+            // console.log(name)
+            const fileExt = name.substring(name.lastIndexOf("."),name.length).toLowerCase()
+            if(fileExt!='.md'){
+                console.log('类型不对')
                 return;
             }
             const reader = new FileReader();
@@ -141,8 +147,9 @@ export default {
                 this.currentValue = reader.result;
                 e.target.value = '';
                 this.editor.setOption('value', this.currentValue);
+                console.log("导入文件 "+name)
             };
-            reader.error = err => {
+            reader.onerror = err => {
                 console.error(err);
             }
         },
@@ -178,7 +185,7 @@ export default {
                 this.imgs = this.$refs.preview.querySelectorAll('img');
                 for (let i = 0, len = this.imgs.length; i<len;i++){
                     this.imgs[i].onclick = () => {
-                        const src = this.img[i].getAttribute('src');
+                        const src = this.imgs[i].getAttribute('src');
                         this.previewImage(src);
                     };
                 }
