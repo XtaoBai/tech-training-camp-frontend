@@ -43,7 +43,7 @@ export default {
     },
     data(){
         return {
-            html:'<div>未来会进行修改</div>',
+            html:'<div></div>',
             previewImgModal:false,
             previewImgSrc: '',
             previewImgMode:''

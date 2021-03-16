@@ -5,8 +5,9 @@ import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/xml/xml';
 import '../assets/js/codemirror/style/codemirror.css';
 import common from '../mixins/common';
-import marked from '../assets/js/marked';
-
+// import marked from '../assets/js/marked';
+// import micromarkdown from '../assets/js/micromarkdown'
+import simpleMarkdown from '../assets/js/simpleMarkdown';
 
 export default {
     name: 'markdown-main',
@@ -370,13 +371,17 @@ export default {
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(() => {
                 const {currentValue} = this;
-                let html = marked(currentValue, {
-                    sanitize: false,
-                    ...this.markedOptions
-                }).replace(/href="/gi, 'target="_blank" href="');
-                if (this.copyCode && html !== '') {
-                    html = html.replace(/<pre>/g, '<div class="code-block"><span class="copy-code">' + this.copyBtnText + '</span><pre>').replace(/<\/pre>/g, '</pre></div>')
-                }
+                // let html = micromarkdown.parse(currentValue)
+                // console.log(html)
+                let data = new simpleMarkdown(currentValue)
+                let html = data.html;
+                //     , {
+                //     sanitize: false,
+                //     // ...this.markedOptions
+                // }
+                // if (this.copyCode && html !== '') {
+                //     html = html.replace(/<pre>/g, '<div class="code-block"><span class="copy-code">' + this.copyBtnText + '</span><pre>').replace(/<\/pre>/g, '</pre></div>')
+                // }
                 this.html = html;
                 this.addImageClickListener();
                 this.addCopyListener();
