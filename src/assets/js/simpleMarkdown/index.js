@@ -21,15 +21,24 @@ class simpleMarkdown {
 
         this.inline_rules = {
             escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,
-            autolink: /^<(scheme:[^\s\x00-\x1f<>]*|email)>/,
+            _escapes: /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g,
             url: /^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,
             link: /^!?\[(label)\]\(\s*(href)(?:\s+(title))?\s*\)/,
             strong: /^__([^\s_])__(?!_)|^\*\*([^\s*])\*\*(?!\*)|^__([^\s][\s\S]*?[^\s])__(?!_)|^\*\*([^\s][\s\S]*?[^\s])\*\*(?!\*)/,
             em: /^_([^\s_])_(?!_)|^\*([^\s*<\[])\*(?!\*)|^_([^\s<][\s\S]*?[^\s_])_(?!_|[^\spunctuation])|^_([^\s_<][\s\S]*?[^\s])_(?!_|[^\spunctuation])|^\*([^\s<"][\s\S]*?[^\s\*])\*(?!\*|[^\spunctuation])|^\*([^\s*"<\[][\s\S]*?[^\s])\*(?!\*)/,
             code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
             br: /^( {2,}|\\)\n(?!\s*$)/,
-            // del: /^~+(?=\S)([\s\S]*?\S)~+/,
-            text: /^(`+|[^`])(?:[\s\S]*?(?:(?=[\\<!\[`*]|\b_|$)|[^ ](?= {2,}\n))|(?= {2,}\n))/
+            text: /^(`+|[^`])(?:[\s\S]*?(?:(?=[\\<!\[`*]|\b_|$)|[^ ](?= {2,}\n))|(?= {2,}\n))/,
+            _label: /(?:\[[^\[\]]*\]|\\.|`[^`]*`|[^\[\]\\`])*?/,
+            _href:/<(?:\\[<>]?|[^\s<>\\])*>|[^\s\x00-\x1f]*/,
+            _title :/"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/
+        }
+        this.replacements = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
         }
 
         src = src
@@ -43,7 +52,12 @@ class simpleMarkdown {
     }
 
     rules_ref(){
-        this.rules.list = this.edit(this.rules.list).replace(/bull/g, /(?:[*+-]|\d{1,9}\.)/).replace('hr', '\\n+(?=\\1?(?:(?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$))').getRegex();
+        this.rules.list = this.edit(this.rules.list).replace(/bull/g, /(?:[*+-]|\d{1,9}\.)/).replace('hr', '\\n+(?=\\1?(?:(?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$))').getRegex();        
+        this.inline_rules.link = this.edit(this.inline_rules.link)
+        .replace('label', this.inline_rules._label)
+        .replace('href', this.inline_rules._href)
+        .replace('title', this.inline_rules._title)
+        .getRegex();
     }
 
     token(src,top){
@@ -287,7 +301,7 @@ class simpleMarkdown {
     
             // link
             if (cap = this.inline_rules.link.exec(src)) {
-                var lastParenIndex = findClosingBracket(cap[2], '()');
+                var lastParenIndex = this.findClosingBracket(cap[2], '()');
                 if (lastParenIndex > -1) {
                     var linkLen = 4 + cap[1].length + lastParenIndex;
                     cap[2] = cap[2].substring(0, lastParenIndex);
@@ -295,15 +309,14 @@ class simpleMarkdown {
                     cap[3] = '';
                 }
                 src = src.substring(cap[0].length);
-                this.inLink = true;
                 href = cap[2];
                 title = cap[3] ? cap[3].slice(1, -1) : '';
                 href = href.trim().replace(/^<([\s\S]*)>$/, '$1');
                 out += this.outputLink(cap, {
-                    href: InlineLexer.escapes(href),
-                    title: InlineLexer.escapes(title)
+                    href: this.escapes(href),
+                    title: this.escapes(title)
                 });
-                this.inLink = false;
+
                 continue;
             }
     
@@ -351,14 +364,67 @@ class simpleMarkdown {
             return out;
         }
 
-        // outputLink(cap,link){
-        //     var href = link.href,
-        //     title = link.title ? this.escape(link.title) : null;
+        escapes(text) {
+            return text ? text.replace(this.inline_rules._escapes, '$1') : text;
+        }
+
+        outputLink(cap,link){
+            var href = link.href,
+            title = link.title ? this.escape(link.title) : null;
     
-        // return cap[0].charAt(0) !== '!'
-        //     ? this.renderer.link(href, title, this.output(cap[1]))
-        //     : this.renderer.image(href, title, this.escape(cap[1]));
-        // }
+        return cap[0].charAt(0) !== '!'
+            ? this.rendererLink(href, title, this.paserInline(cap[1]))
+            : this.rendererImage(href, title, this.escape(cap[1]));
+        }
+
+        rendererLink(href, title, text) {
+
+            if (href === null) {
+                return text;
+            }
+            var out = '<a href="' + escape(href) + '"';
+            if (title) {
+                out += ' title="' + title + '"';
+            }
+            out += '>' + text + '</a>';
+            return out;
+        };
+
+        rendererImage(href, title, text) {
+
+            if (href === null) {
+                return text;
+            }
+        
+            var out = '<img src="' + href + '" alt="' + text + '"';
+            if (title) {
+                out += ' title="' + title + '"';
+            }
+            out += '/>' ;
+            return out;
+        }
+
+        findClosingBracket(str, b) {
+            if (str.indexOf(b[1]) === -1) {
+                return -1;
+            }
+            var level = 0;
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] === '\\') {
+                    i++;
+                } else if (str[i] === b[0]) {
+                    level++;
+                } else if (str[i] === b[1]) {
+                    level--;
+                    if (level < 0) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+        
+
 
         rendererTablerow (content){
             return '<tr>\n' + content + '</tr>\n';
@@ -389,15 +455,15 @@ class simpleMarkdown {
 
         escape(html, encode) {
             if (encode) {
-                if (escape.escapeTest.test(html)) {
+                if (/[&<>"']/.test(html)) {
                     return html.replace(escape.escapeReplace, function (ch) {
-                        return escape.replacements[ch];
+                        return this.replacements[ch];
                     });
                 }
             } else {
-                if (escape.escapeTestNoEncode.test(html)) {
-                    return html.replace(escape.escapeReplaceNoEncode, function (ch) {
-                        return escape.replacements[ch];
+                if (/[<>"']|&(?!#?\w+;)/.test(html)) {
+                    return html.replace(/[<>"']|&(?!#?\w+;)/g, function (ch) {
+                        return this.replacements[ch];
                     });
                 }
             }

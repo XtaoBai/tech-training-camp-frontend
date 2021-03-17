@@ -343,7 +343,6 @@ export default {
                 const previewScrollHeight = preview.scrollHeight;
                 preview.scrollTop = parseInt(
                     (scrollTop * (previewScrollHeight - contentHeight)) / (height - contentHeight), 10);
-                    // this.editor.scrollTo(0, scrollTop);
             }
 
         },
@@ -355,7 +354,7 @@ export default {
                 const previewScrollTop = preview.scrollTop;
                 const scrollTop = parseInt(
                     (previewScrollTop * (this.editorScrollHeight - contentHeight)) / (previewScrollHeight - contentHeight), 10);
-                    this.editor.scrollTo(0, scrollTop);
+                    this.editor.scrollTo(0,scrollTop);
             }
         },
         redo() {
