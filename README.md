@@ -35,7 +35,7 @@
 -  Vue 框架
 -  iconfont 图标库
 -  CodeMirror 支持编辑区编辑
--  Node.js / Flask 支持后端
+
 
 
 -----
