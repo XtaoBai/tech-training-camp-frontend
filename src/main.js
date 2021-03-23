@@ -1,8 +1,50 @@
 import Vue from 'vue'
+import './plugins/axios'
 import App from './App.vue'
+import router from './router'
+import ViewUI from 'view-design'
+import store from './store'
+import Valid from './utils/valid'
+// import './assets/css/Iview-theme/index.less'
+
+import 'view-design/dist/styles/iview.css'
+
+Vue.use(ViewUI)
+
+Vue.prototype.$Valid = Valid;
 
 Vue.config.productionTip = false
 
+// 实现全局路由守卫
+router.beforeEach((to, from, next) => {
+	if (to.meta.title) {
+    document.title = to.meta.title;
+	}
+
+	if (to.meta.requireAuth) {
+		if (store.state.userInfo.data.token) {
+			if (to.path == '/login') {
+        next('/');
+      } else {
+        next();
+      }
+		} else {
+			next('/login');
+		}
+	} else {
+		if (store.state.userInfo.data.token) {
+			next('/');
+		} else {
+			next();
+		}
+	}
+
+})
+
+
+
 new Vue({
-  render: h => h(App),
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')

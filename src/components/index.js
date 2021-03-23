@@ -8,11 +8,13 @@ import common from '../mixins/common';
 // import marked from '../assets/js/marked';
 // import micromarkdown from '../assets/js/micromarkdown'
 import simpleMarkdown from '../assets/js/simpleMarkdown';
+import bus from '../assets/js/bus'
 
 export default {
     name: 'markdown-main',
     mixins: [common],
     
+
     data(){
         return{
             main: true,
@@ -24,8 +26,17 @@ export default {
     mounted() {
         this.init();
         this.createEditor();
+        this.getContent();
     },
     methods: {
+        // 获取数据值
+        getContent(){
+            bus.$on('getContent', (content)=>{
+                this.currentValue = content;
+                this.editor.setOption('value', this.currentValue);
+            })
+        },
+
         init() { // 初始化
             this.currentValue = this.value;
             this.themeName = this.theme;
