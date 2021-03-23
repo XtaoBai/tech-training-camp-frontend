@@ -346,8 +346,8 @@ export default {
   height: 100vh;
 
   .pageHeader {
-    padding-top: 30px;
-    padding-left: 40px;
+    padding-top: 40px;
+    padding-left: 60px;
     
     img {
       vertical-align: middle;
@@ -356,7 +356,7 @@ export default {
     }
 
     span {
-      font-size: 18px;
+      font-size: 20px;
       display: inline-block;
       vertical-align: -4px;
       color: rgba(255, 255, 255, 1);
