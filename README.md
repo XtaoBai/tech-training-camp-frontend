@@ -2,6 +2,7 @@
 
 
 构建的一个所见及所得的 Markdown 编辑器。构建了一个 simpleMarkdown 对文档内容进行解析，并实现对文档内容进行渲染。服务端文档储存功能与协同编辑功能暂时未有实现。
+示例页面 https://xtaobai.github.io/tech-training-camp-frontend/
 
 ## 特性
 
