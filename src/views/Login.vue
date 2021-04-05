@@ -80,12 +80,8 @@
             @click.stop="register">
             立即注册
           </Button>
-
         </div>
-
-
     </div>
-
 
   </div>
   </div>

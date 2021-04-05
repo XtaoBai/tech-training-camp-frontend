@@ -23,7 +23,7 @@
     </a>
     <DropdownMenu slot="list">
         <DropdownItem name="a">修改密码</DropdownItem>
-        <DropdownItem name="b">退出</DropdownItem>
+        <!-- <DropdownItem name="b">退出</DropdownItem> -->
     </DropdownMenu>
     </Dropdown>    
 

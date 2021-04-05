@@ -102,7 +102,7 @@ export default {
         },
         insertTable(){ // 插入表格
             this.insertContent(
-                '\n| header 1 | header 2 | \n---|---\n| row 1 col 1 | row 1 col 2 |\nrow 2 col 1 | row 2 col 2| \n\n'
+                '\n| header 1 | header 2 | \n| ---|--- |\n| row 1 col 1 | row 1 col 2 |\n| row 2 col 1 | row 2 col 2 |\n\n'
                 );
         },
         handleSave(){ // 保存操作

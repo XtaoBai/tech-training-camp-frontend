@@ -148,9 +148,7 @@ class simpleMarkdown {
             for (let i=0;i<itemList.length-1;i++){
                 this.tokens.push('<li>'+itemList[i]+'</li>\n');
             }
-
-
-                
+            
             this.tokens.push(end);
 
             continue;
